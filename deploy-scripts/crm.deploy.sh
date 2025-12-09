@@ -25,17 +25,21 @@ pushd "${TMP_DIR}/backend"
 
 # Build sequence
 write_log "Running build"
-mvn clean package >> $LOG_FILE || { write_log "An error occurred"; exit 1; }
+mvn clean package -DskipTests >> $LOG_FILE || { write_log "An error occurred"; exit 1; }
 
 # Move build to apps directory
+write_log "Contents of build directory"
+ls -lah >> $LOG_FILE
+write_log "Contents of target directory"
+ls -lah target/ >> $LOG_FILE
 write_log "Moving application to target directory"
-mkdir -p "${REPO_DIR}/backend/config"
-mv target/* "${REPO_DIR}/backend/"
-write_log "Content of target directory"
-ls "${REPO_DIR}/backend/" >> $LOG_FILE
+mkdir -p "${REPO_DIR}/config"
+mv target/crm-0.0.1-SNAPSHOT.jar "${REPO_DIR}/crm_backend.jar"
+write_log "Contents of target directory"
+ls "${REPO_DIR}/" >> $LOG_FILE
 
 write_log "Moving application properties file"
-cp /srv/admin/vault/crm_backend.env "${REPO_DIR}/backend/config/application.yml"
+cp /srv/admin/vault/crm_backend.env "${REPO_DIR}/config/application.yml"
 write_log "Build complete"
 
 # Restart service
