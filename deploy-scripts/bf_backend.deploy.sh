@@ -51,6 +51,9 @@ chmod 660 public/keys/oauth/oauth-public.key
 write_log "Checking generated keys"
 ls -la public/keys/oauth/ >> $LOG_FILE
 ls -la storage/ >> $LOG_FILE
+write_log "Copying client keys"
+cp -r /srv/admin/vault/bf_backend_keys/keys/client public/keys/
+ls -la public/keys/client
 
 write_log "Clearing up cache"
 php artisan config:clear
