@@ -41,8 +41,23 @@ npm run build >> $LOG_FILE || { write_log "npm build failed"; exit 1; }
 write_log "Linking storage" 
 php artisan storage:link || { write_log "Failed linking storage"; exit 1; }
 
-wrtie_log "Copying passport keys"
-cp -r /srv/admin/vault/bf_backend_keys/keys public/
+write_log "Generating passport keys"
+mkdir -p public/keys/oauth
+chmod 755 public/keys
+chmod 755 public/keys/oauth
+php artisan passport:keys --force
+chmod 640 public/keys/oauth/oauth-private.key
+chmod 660 public/keys/oauth/oauth-public.key
+write_log "Checking generated keys"
+ls -la public/keys/oauth/ >> $LOG_FILE
+ls -la storage/ >> $LOG_FILE
+
+write_log "Clearing up cache"
+php artisan config:clear
+php artisan cache:clear
+
+write_log "Caching filament components"
+php artisan filament:cache-components
 
 write_log "Copying secret manager configuration"
 cp /srv/admin/vault/google-service-account.json storage/app/
