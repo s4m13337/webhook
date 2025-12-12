@@ -46,7 +46,17 @@ write_log "Build complete"
 sudo systemctl restart crm_backend
 
 popd
-# TODO: Build script for frontend
+
+write_log "Building frontend"
+pushd "${TMP_DIR}/frontend"
+write_log "Installing packages"
+npm install
+write_log "Creating build"
+npm run build
+write_log "Movind build to target directory"
+mv build "${REPO_DIR}/frontend"
+
+popd
 
 rm -rf $TMP_DIR
 write_log "Deployment completed"
