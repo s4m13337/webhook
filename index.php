@@ -136,9 +136,9 @@ switch ($repositoryName) {
 
     case "bf_backend":
         writeLog("Starting deployment script for bf_backend");
-        exec(
-            "nohup sudo -u deployer /srv/apps/deploy-scripts/bf_backend.deploy.sh &",
-        );
+
+        #exec("nohup sudo -u deployer /srv/apps/deploy-scripts/bf_backend.deploy.sh &");
+        exec("nohup sudo -u deployer /srv/apps/deploy-scripts/git-sync.sh  bf_backend &");
         break;
 
     case "partner-app-backend":
@@ -151,7 +151,7 @@ switch ($repositoryName) {
     case "crm":
         writeLog("Starting deployment script for CRM_new_backend");
         exec(
-            "nohup sudo -u deployer /srv/apps/deploy-scripts/crm.deploy.sh &",
+            "nohup sudo -u deployer /srv/apps/deploy-scripts/git-sync.sh crm &",
         );
         break;
 
